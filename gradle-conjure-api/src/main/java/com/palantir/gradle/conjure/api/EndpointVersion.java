@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Objects;
 
-public final class EndpointMinimumVersion implements Serializable {
+public final class EndpointVersion implements Serializable {
 
     @JsonProperty("http-path")
     private String httpPath;
@@ -30,6 +30,9 @@ public final class EndpointMinimumVersion implements Serializable {
 
     @JsonProperty("min-version")
     private String minVersion;
+
+    @JsonProperty("max-version")
+    private String maxVersion;
 
     public String getHttpPath() {
         return httpPath;
@@ -55,6 +58,14 @@ public final class EndpointMinimumVersion implements Serializable {
         this.minVersion = minVersion;
     }
 
+    public String getMaxVersion() {
+        return maxVersion;
+    }
+
+    public void setMaxVersion(String maxVersion) {
+        this.maxVersion = maxVersion;
+    }
+
     @Override
     public boolean equals(Object source) {
         if (this == source) {
@@ -63,14 +74,15 @@ public final class EndpointMinimumVersion implements Serializable {
         if (source == null || getClass() != source.getClass()) {
             return false;
         }
-        EndpointMinimumVersion that = (EndpointMinimumVersion) source;
+        EndpointVersion that = (EndpointVersion) source;
         return Objects.equals(httpPath, that.httpPath)
                 && Objects.equals(httpMethod, that.httpMethod)
-                && Objects.equals(minVersion, that.minVersion);
+                && Objects.equals(minVersion, that.minVersion)
+                && Objects.equals(maxVersion, that.maxVersion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(httpPath, httpMethod, minVersion);
+        return Objects.hash(httpPath, httpMethod, minVersion, maxVersion);
     }
 }

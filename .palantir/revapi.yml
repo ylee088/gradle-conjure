@@ -1,0 +1,14 @@
+acceptedBreaks:
+  "5.12.0":
+    com.palantir.gradle.conjure:gradle-conjure-api:
+    - code: "java.class.removed"
+      old: "class com.palantir.gradle.conjure.api.EndpointMinimumVersion"
+      justification: "Including maximum versions in endpoints as well as the minumum\
+        \ versions."
+    - code: "java.method.returnTypeTypeParametersChanged"
+      old: "method org.gradle.api.provider.SetProperty<com.palantir.gradle.conjure.api.EndpointMinimumVersion>\
+        \ com.palantir.gradle.conjure.api.ConjureProductDependenciesExtension::getEndpointVersions()"
+      new: "method org.gradle.api.provider.SetProperty<com.palantir.gradle.conjure.api.EndpointVersion>\
+        \ com.palantir.gradle.conjure.api.ConjureProductDependenciesExtension::getEndpointVersions()"
+      justification: "Including maximum versions in endpoints as well as the minumum\
+        \ versions."

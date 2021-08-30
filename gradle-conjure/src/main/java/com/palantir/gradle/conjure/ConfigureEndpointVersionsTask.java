@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.palantir.gradle.conjure.api.ConjureProductDependenciesExtension;
-import com.palantir.gradle.conjure.api.EndpointMinimumVersion;
+import com.palantir.gradle.conjure.api.EndpointVersion;
 import com.palantir.logsafe.Preconditions;
 import java.util.List;
 import org.gradle.api.DefaultTask;
@@ -34,12 +34,12 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.bundling.Jar;
 
-public class ConfigureEndpointMinimumVersionsTask extends DefaultTask {
-    private final ListProperty<EndpointMinimumVersion> endpointVersions =
-            getProject().getObjects().listProperty(EndpointMinimumVersion.class);
+public class ConfigureEndpointVersionsTask extends DefaultTask {
+    private final ListProperty<EndpointVersion> endpointVersions =
+            getProject().getObjects().listProperty(EndpointVersion.class);
 
-    public ConfigureEndpointMinimumVersionsTask() {
-        setDescription("Configures the 'jar' task to write the endpoint minimum versions into its manifest");
+    public ConfigureEndpointVersionsTask() {
+        setDescription("Configures the 'jar' task to write the endpoint versions into its manifest");
     }
 
     @TaskAction
@@ -59,21 +59,20 @@ public class ConfigureEndpointMinimumVersionsTask extends DefaultTask {
     }
 
     @Input
-    public final ListProperty<EndpointMinimumVersion> getVersions() {
+    public final ListProperty<EndpointVersion> getVersions() {
         return endpointVersions;
     }
 
-    private Manifest createManifest(Project project, List<EndpointMinimumVersion> versions) {
+    private Manifest createManifest(Project project, List<EndpointVersion> versions) {
         JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
         return javaConvention.manifest(manifest -> {
             String minVersionsString;
             try {
-                EndpointMinimumVersions emvs = EndpointMinimumVersions.builder()
-                        .minimumVersions(versions)
-                        .build();
+                EndpointVersions emvs =
+                        EndpointVersions.builder().endpointVersions(versions).build();
                 minVersionsString = new ObjectMapper().writeValueAsString(emvs);
             } catch (JsonProcessingException e) {
-                throw new GradleException("Couldn't serialize endpoint minimum versions as string", e);
+                throw new GradleException("Couldn't serialize endpoint versions as string", e);
             }
             manifest.attributes(ImmutableMap.of(
                     ConjureProductDependenciesExtension.ENDPOINT_VERSIONS_MANIFEST_KEY, minVersionsString));
